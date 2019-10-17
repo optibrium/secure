@@ -1,4 +1,5 @@
 import re
+from flask import escape
 from time import time
 
 
@@ -13,7 +14,7 @@ class Message:
         if re.search("[^0-9a-zA-Z-=+/]", content['text']):
             raise ValueError('Invalid text')
         else:
-            self.text = content['text']
+            self.text = str(escape(content['text']))
 
         if int(content['ttl']) < 1 or int(content['ttl']) > 604800:
             raise ValueError('invalid ttl')

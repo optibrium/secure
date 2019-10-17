@@ -31,21 +31,6 @@ var send = () =>
     })
 };
 
-var single_init = () =>
-{
-    var password = window.location.hash.replace('#', '')
-    var decrypted = decrypt(window.message, password)
-    if (decrypted.length)
-        element('message').innerHTML = message_template(decrypted)
-};
-
-var double_init= () =>
-{
-    var password = element('out_of_band_password_input').value
-    window.message = decrypt(window.message, password)
-    single_init()
-};
-
 var generate_password = (length) =>
 {
     var random_data = crypto.getRandomValues(new Uint32Array(128)).join()
@@ -67,7 +52,7 @@ var decrypt = (message, password) =>
 
 var save_to_server = (data, callback) =>
 {
-    fetch(server_address,
+    fetch(window.location.origin,
     {
         method: 'POST',
         headers: {
@@ -81,7 +66,7 @@ var save_to_server = (data, callback) =>
 
 var url_template = (id, password) =>
 {
-    return `<span class="url_populated">${server_address}/?${id}#${password}</span>`
+    return `<span class="url_populated">${window.location.origin}/?${id}#${password}</span>`
 };
 
 var pass_template = (password) =>

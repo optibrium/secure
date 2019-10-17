@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script>
-            var server_address = "{{ server_address }}" ;
-        </script>
         <script src='/static/vendor/aes-min.js'></script>
         <script src='/static/vendor/sha3-min.js'></script>
         <script src='/static/secure.js'></script>
