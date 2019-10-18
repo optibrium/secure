@@ -7,6 +7,10 @@
         <link rel="stylesheet" type="text/css" href="/static/secure.css">
     </head>
     <body>
+        <div class="header centered">
+            <h1>SecureClip</h1>
+            <h3>For when you need to reach out and paste something</h3>
+        </div>
         <div class="centered">
             <textarea id='input'></textarea>
         </div>
@@ -31,8 +35,8 @@
                 <label>Out Of Band Required</label>
                 <input type='checkbox' id='double_encrypted'></input>
             </span>
-            <span class="selector">
-                <button onclick="send()">send</button>
+            <span class="selector send" onclick="send()">
+                <span>send</span>
             </span>
         </div>
         <div class="centered">
