@@ -43,6 +43,7 @@
                     type="text"
                     placeholder="Enter your Out Of Band password"
                 ></input>
+                <script>element('out_of_band_password_input').focus()</script>
 
             {% else %}
 

@@ -85,22 +85,23 @@ input[type=checkbox]
 }
 .selector
 {
-    background: #d9fffe;
-    border: 1px solid #dcdcff;
+    background: #d1d1d1;
+    border: 1px solid grey;
     margin-right: 10px;
     padding: 10px;
     border-radius: 3px;
 }
-.send:hover
-{
-    background: #a4f8f6;
-    cursor: pointer;
-}
 .selector > select
 {
-    background: #d9fffe;
+    background: #d1d1d1;
     border: none;
     font-size: 0.9vw;
+}
+.send:hover
+{
+    background: #ff3a3a;
+    color: white;
+    cursor: pointer;
 }
 textarea
 {
