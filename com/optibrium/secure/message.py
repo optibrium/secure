@@ -1,3 +1,4 @@
+import json
 import re
 from flask import escape
 from time import time
@@ -19,11 +20,20 @@ class Message:
         if int(content['ttl']) < 1 or int(content['ttl']) > 604800:
             raise ValueError('invalid ttl')
         else:
-            self.expires = int(time()) + int(content['ttl'])
+            self.ttl = int(content['ttl'])
+            self.expires = int(time()) + self.ttl
 
-        self.burnable = bool(content['burn_after_reading'])
+        self.burn_after_reading = bool(content['burn_after_reading'])
         self.double_encrypted = bool(content['double_encrypted'])
 
     @property
     def expired(self):
         return int(time()) > self.expires
+
+    @property
+    def json(self):
+        return json.dumps(self.__dict__)
+
+    @staticmethod
+    def from_json(string):
+        return Message(json.loads(string))

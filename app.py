@@ -1,19 +1,25 @@
 from com.optibrium.secure.message import Message
-from com.optibrium.secure.objectbackend import ObjectBackend
+from com.optibrium.secure.backend import ObjectBackend
+from com.optibrium.secure.backend import RedisBackend
 from flask import Flask, request, render_template
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import logging
-
+from os import environ
+import traceback
 
 application = Flask(__name__)
-application.backend = ObjectBackend()
-application.logger.disabled = True
-
-log = logging.getLogger('werkzeug')
-log.disabled = True
-
 limiter = Limiter(application, key_func=get_remote_address)
+
+if 'DEBUG' not in environ:
+    application.logger.disabled = True
+    log = logging.getLogger('werkzeug')
+    log.disabled = True
+
+if 'REDIS' in environ:
+    application.backend = RedisBackend(environ.get('REDIS'))
+else:
+    application.backend = ObjectBackend()
 
 
 @application.route('/', methods=['GET'])
@@ -35,8 +41,8 @@ def post():
 
 @application.errorhandler(Exception)
 def handle_error(error):
+
+    if 'DEBUG' in environ:
+        traceback.print_exc()
+
     return render_template('notfound.tpl'), 404
-
-
-if __name__ == '__main__':
-    application.run(debug=True, port=8080)
