@@ -11,25 +11,30 @@ const send = () =>
         return
 
     var password = generate_password(32)
-    var out_of_band_password = generate_password(32)
     var text = encrypt(element('input').value, password)
 
     if(element('double_encrypted').checked)
     {
-        text = encrypt(text, out_of_band_password)
+        request_out_of_band_password((out_of_band_password) =>
+        {
+            text = encrypt(text, out_of_band_password)
+            save_to_server(text, (reply)=>
+            {
+                element('url').innerHTML = url_template(reply.id, password)
+            })
+        }
     }
-
-    save_to_server({
-        'burn_after_reading': element('burn_after_reading').checked,
-        'double_encrypted': element('double_encrypted').checked,
-        'text': text,
-        'ttl': element('ttl').value
-    }, (reply)=>
+    else
     {
-        element('url').innerHTML = url_template(reply.id, password)
-        if(element('double_encrypted').checked)
-            element('out_of_band_password').innerHTML = pass_template(out_of_band_password)
-    })
+        save_to_server(text, (reply)=>
+        {
+            element('url').innerHTML = url_template(reply.id, password)
+        })
+    }
+};
+
+const request_out_of_band_password = (callback) =>
+{
 };
 
 const generate_password = (length) =>
@@ -51,15 +56,18 @@ const decrypt = (message, password) =>
     return decrypted.toString(CryptoJS.enc.Utf8)
 };
 
-const save_to_server = (data, callback) =>
+const save_to_server = (text, callback) =>
 {
     fetch(window.location.origin,
     {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'burn_after_reading': element('burn_after_reading').checked,
+            'double_encrypted': element('double_encrypted').checked,
+            'text': text,
+            'ttl': element('ttl').value
+        })
     })
     .then(resp => resp.json())
     .then(reply => callback(reply))

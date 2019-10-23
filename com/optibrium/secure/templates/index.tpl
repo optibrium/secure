@@ -40,9 +40,6 @@
             </span>
         </div>
         <div class="centered">
-            <p id='out_of_band_password'></p>
-        </div>
-        <div class="centered">
             <p id='url'></p>
         </div>
     </body>
