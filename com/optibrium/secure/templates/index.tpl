@@ -12,7 +12,22 @@
             <h3>For when you need to reach out and paste something</h3>
         </div>
         <div class="centered">
-            <textarea id='input'></textarea>
+            <textarea id='input' onfocus="hide_url()"></textarea>
+        </div>
+        <div id="out_of_band_password_container" class="centered hidden">
+            <input
+                type="password"
+                id="out_of_band_password_first_input"
+                placeholder="Please enter your out of band password..."
+            ></input>
+            <span
+                id="show_password_container"
+                title="show password"
+                onmouseover="reveal_password()"
+                onmouseout="unreveal_password()"
+                >
+                <img src='/static/eye.svg' id="show_password"/>
+            </span>
         </div>
         <div class="centered">
             <span class="selector">
@@ -35,12 +50,22 @@
                 <label>Out Of Band Required</label>
                 <input type='checkbox' id='double_encrypted'></input>
             </span>
-            <span class="selector send" onclick="send()">
+            <span id="send" class="selector send" onclick="send()">
                 <span>send</span>
             </span>
         </div>
-        <div class="centered">
-            <p id='url'></p>
+        <div id="url_container" class="centered hidden">
+            <span id="url"></span>
+            <span
+                id="clipboard_container"
+                title="Copy to Clipboard"
+                onmousedown="copy_to_clipboard()"
+            >
+                <img src='/static/clipboard.svg' id="clipboard"/>
+            </span>
+            <span id="green_tick" class="green_tick green_tick_hidden">
+                <img src='/static/tick.svg' id="white_tick"/>
+            </span>
         </div>
     </body>
 </html>

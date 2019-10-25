@@ -20,21 +20,31 @@ const send = () =>
             text = encrypt(text, out_of_band_password)
             save_to_server(text, (reply)=>
             {
-                element('url').innerHTML = url_template(reply.id, password)
+                show_url(url_template(reply.id, password))
             })
-        }
+        })
     }
     else
     {
         save_to_server(text, (reply)=>
         {
-            element('url').innerHTML = url_template(reply.id, password)
+            show_url(url_template(reply.id, password))
         })
     }
 };
 
 const request_out_of_band_password = (callback) =>
 {
+    element('out_of_band_password_container').classList.remove('hidden')
+    element('send').classList.add('hidden')
+    element('out_of_band_password_first_input').onkeydown = out_of_band_key_down.bind({}, () =>
+    {
+        var out_of_band_password = element('out_of_band_password_first_input').value
+        if(out_of_band_password.length)
+        {
+            callback(out_of_band_password)
+        }
+    })
 };
 
 const generate_password = (length) =>
@@ -75,16 +85,55 @@ const save_to_server = (text, callback) =>
 
 const url_template = (id, password) =>
 {
-    return `<span class="url_populated">${window.location.origin}/?${id}#${password}</span>`
+    return `${window.location.origin}/?${id}#${password}`
 };
 
-const pass_template = (password) =>
-{
-    return `<span class="pass_populated"><span>Out Of Band Password: </span><span>${password}</span></span>`
-};
-
-const decryptKeyDown = (event) =>
+const decrypt_key_down = (event) =>
 {
     if (event.key == 'Enter')
         init()
+};
+
+const out_of_band_key_down = (callback, event) =>
+{
+    if (event.key == 'Enter')
+        callback()
+};
+
+const reveal_password = () =>
+{
+    element('out_of_band_password_first_input').type = 'text'
+};
+
+const unreveal_password = () =>
+{
+    element('out_of_band_password_first_input').type = 'password'
+};
+
+const hide_url = ()=>
+{
+    element('url_container').classList.add('hidden')
+    element('out_of_band_password_container').classList.add('hidden')
+    element('send').classList.remove('hidden')
+};
+
+const show_url = (url)=>
+{
+    element('url').innerHTML = url
+    element('url_container').classList.remove('hidden')
+};
+
+const copy_to_clipboard = () =>
+{
+    var temp = document.createElement('textarea')
+    temp.value = element('url').innerText
+    document.body.appendChild(temp)
+    temp.select()
+    document.execCommand('copy')
+    document.body.removeChild(temp)
+    element('green_tick').classList.remove('green_tick_hidden')
+    setTimeout(() =>
+    {
+        element('green_tick').classList.add('green_tick_hidden')
+    }, 2000)
 };

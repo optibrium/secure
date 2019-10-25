@@ -11,6 +11,30 @@ body
     position: relative;
     width: 80%;
 }
+#clipboard
+{
+    height: 60%;
+    opacity: 0.8;
+    position: relative;
+    top: 20%;
+    width: 100%;
+}
+#clipboard_container
+{
+    background: #ffd6d6;
+    border-radius: 3px;
+    border: 0.5px solid #ff9393;
+    float: left;
+    height: 38.5px;
+    margin-left: 10px;
+    position: relative;
+    width: 40px;
+}
+#clipboard_container:hover
+{
+    background: #ff3a3a;
+    cursor: pointer;
+}
 #decrypt_button
 {
     float: left;
@@ -18,6 +42,24 @@ body
     padding: 10px;
     position: relative;
     top: -25px;
+}
+.green_tick
+{
+    background: #2dd52d;
+    border-radius: 3px;
+    border: 0.5px solid #ff9393;
+    float: left;
+    height: 38.5px;
+    left: -42px;
+    position: relative;
+    transform-origin: top right;
+    transition: all 0.5s ease;
+    width: 41px;
+}
+.green_tick_hidden
+{
+    transform: scale(0);
+    transform-origin: top left;
 }
 .header > h1
 {
@@ -29,6 +71,11 @@ body
     color: grey;
     font-size: 1rem;
     font-style: italic;
+}
+.hidden
+{
+    visibility: hidden;
+    position: absolute;
 }
 input[type=checkbox]
 {
@@ -62,11 +109,18 @@ input[type=checkbox]
     font-size: 3.5vh;
     text-align: center;
 }
-#out_of_band_password
+#out_of_band_password_container
 {
-    margin-top: 30px;
+    height: 40px;
 }
-#out_of_band_password_input
+#out_of_band_password_first_input
+{
+    float: left;
+    padding: 10px;
+    position: absolute;
+    width: 93%
+}
+#out_of_band_password_second_input
 {
     float: left;
     left: 10%;
@@ -103,6 +157,24 @@ input[type=checkbox]
     color: white;
     cursor: pointer;
 }
+#show_password
+{
+    height: 50%;
+    left: 25%;
+    opacity: 0.7;
+    position: relative;
+    top: 25%;
+    width: 50%;
+}
+#show_password_container
+{
+    background: white;
+    border: 0.5px solid #a9a9a9;
+    height: 38.5px;
+    left: 96.5%;
+    position: absolute;
+    width: 6%;
+}
 textarea
 {
     height: 250px;
@@ -111,15 +183,29 @@ textarea
 }
 #url
 {
-    margin-top: 25px;
-    width: 100%;
-}
-.url_populated
-{
     background: #ffd6d6;
-    border: 1px solid #ff9393;
+    border: 0.5px solid #ff9393;
     border-radius: 3px;
     color: #0a0a00;
+    float: left;
     padding: 10px;
-    width: 100%;
+    position: relative;
+    height: 100%;
+}
+#url_container
+{
+    border-radius: 3px;
+    font-size: 1rem;
+    margin-top: 30px;
+    min-height: 40px;
+    position: relative;
+}
+#white_tick
+{
+    height: 50%;
+    left: 25%;
+    opacity: 0.7;
+    position: relative;
+    top: 25%;
+    width: 50%;
 }

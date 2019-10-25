@@ -11,7 +11,7 @@
 
                 {% if message.double_encrypted %}
 
-                var password = element('out_of_band_password_input').value
+                var password = element('out_of_band_password_second_input').value
                 message = decrypt(message, password)
 
                 {% endif %}
@@ -38,12 +38,12 @@
             {% if message.double_encrypted %}
 
                 <input
-                    onkeydown="decryptKeyDown(event)"
-                    id="out_of_band_password_input"
-                    type="text"
+                    onkeydown="decrypt_key_down(event)"
+                    id="out_of_band_password_second_input"
+                    type="password"
                     placeholder="Enter your Out Of Band password"
                 ></input>
-                <script>element('out_of_band_password_input').focus()</script>
+                <script>element('out_of_band_password_second_input').focus()</script>
 
             {% else %}
 
