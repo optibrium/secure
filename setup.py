@@ -6,7 +6,7 @@ def get_version_from_git_tag():
     return tag if len(tag) else '0.0.0'
 
 setup(
-    name='cdoapi',
+    name='secureclip',
     version=get_version_from_git_tag(),
 
     author='Graham, DevOps, Optibrium',
@@ -30,6 +30,7 @@ setup(
     description='An secure clipboard for sharing secrets',
     install_requires=[
         'Flask==1.1.1',
+        'flask_limiter==1.1.0',
         'redis==3.3.11'
     ],
     keywords='secure clip clipboard',
