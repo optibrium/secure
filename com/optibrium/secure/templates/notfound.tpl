@@ -11,6 +11,6 @@
         <div id="not_found_container" class="centered">
             <p>Message not found</p>
         </div>
-        <a href='/'><button class="selector centered link">Create a new clip</button></a>
+        <a href='/'><button id="new_clip" class="selector centered link">Create a new clip</button></a>
     </body>
 </html>

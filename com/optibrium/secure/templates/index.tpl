@@ -12,7 +12,7 @@
             <h3>For when you need to reach out and paste something</h3>
         </div>
         <div class="centered">
-            <textarea id='input' onfocus="hide_url()"></textarea>
+            <textarea id='input' onfocus="hide_url_and_send()" onkeyup="hide_url_and_send()"></textarea>
         </div>
         <div id="out_of_band_password_container" class="centered hidden">
             <input
@@ -20,6 +20,12 @@
                 id="out_of_band_password_first_input"
                 placeholder="Please enter your out of band password..."
             ></input>
+            <span
+                id="send_out_of_band"
+                title="send"
+            >
+                <img src='/static/arrow.svg' id="send_out_of_band_arrow"/>
+            </span>
             <span
                 id="show_password_container"
                 title="show password"
@@ -42,15 +48,21 @@
                     <option value='604800'>1 week</option>
                 </select>
             </span>
-            <span class="selector">
-                <label>Burn After Reading</label>
-                <input type='checkbox' id='burn_after_reading'></input>
+            <span
+                id="burn_after_reading"
+                class="selector selectable"
+                onclick="toggle_burn_after_reading()"
+            >
+                <span>Burn After Reading</span>
             </span>
-            <span class="selector">
-                <label>Out Of Band Required</label>
-                <input type='checkbox' id='double_encrypted'></input>
+            <span
+                id="out_of_band"
+                class="selector selectable"
+                onclick="toggle_out_of_band()"
+            >
+                <span>Out Of Band Required</span>
             </span>
-            <span id="send" class="selector send" onclick="send()">
+            <span id="send" class="selector selectable hidden" onclick="send()">
                 <span>send</span>
             </span>
         </div>

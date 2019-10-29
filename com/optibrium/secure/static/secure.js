@@ -1,5 +1,9 @@
 "use strict";
 
+var burn_after_reading_required = false
+
+var out_of_band_required = false
+
 const element = (id) =>
 {
     return document.getElementById(id)
@@ -10,13 +14,14 @@ const send = () =>
     if(!element('input').value.length)
         return
 
-    var password = generate_password(32)
-    var text = encrypt(element('input').value, password)
+    element('url_container').classList.add('hidden')
 
-    if(element('double_encrypted').checked)
+    if(out_of_band_required)
     {
         request_out_of_band_password((out_of_band_password) =>
         {
+            var password = generate_password(32)
+            var text = encrypt(element('input').value, password)
             text = encrypt(text, out_of_band_password)
             save_to_server(text, (reply)=>
             {
@@ -26,6 +31,8 @@ const send = () =>
     }
     else
     {
+        var password = generate_password(32)
+        var text = encrypt(element('input').value, password)
         save_to_server(text, (reply)=>
         {
             show_url(url_template(reply.id, password))
@@ -35,16 +42,19 @@ const send = () =>
 
 const request_out_of_band_password = (callback) =>
 {
-    element('out_of_band_password_container').classList.remove('hidden')
-    element('send').classList.add('hidden')
-    element('out_of_band_password_first_input').onkeydown = out_of_band_key_down.bind({}, () =>
+    const collect_out_of_band_password = () =>
     {
         var out_of_band_password = element('out_of_band_password_first_input').value
         if(out_of_band_password.length)
         {
             callback(out_of_band_password)
         }
-    })
+    };
+
+    element('out_of_band_password_container').classList.remove('hidden')
+    element('send').classList.add('hidden')
+    element('send_out_of_band_arrow').onclick = collect_out_of_band_password
+    element('out_of_band_password_first_input').onkeydown = out_of_band_key_down.bind({}, collect_out_of_band_password)
 };
 
 const generate_password = (length) =>
@@ -73,8 +83,8 @@ const save_to_server = (text, callback) =>
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            'burn_after_reading': element('burn_after_reading').checked,
-            'double_encrypted': element('double_encrypted').checked,
+            'burn_after_reading': burn_after_reading_required,
+            'double_encrypted': out_of_band_required,
             'text': text,
             'ttl': element('ttl').value
         })
@@ -110,11 +120,18 @@ const unreveal_password = () =>
     element('out_of_band_password_first_input').type = 'password'
 };
 
-const hide_url = ()=>
+const hide_url_and_send = () =>
 {
     element('url_container').classList.add('hidden')
     element('out_of_band_password_container').classList.add('hidden')
-    element('send').classList.remove('hidden')
+    if(element('input').value.length)
+    {
+        element('send').classList.remove('hidden')
+    }
+    else
+    {
+        element('send').classList.add('hidden')
+    }
 };
 
 const show_url = (url)=>
@@ -137,3 +154,35 @@ const copy_to_clipboard = () =>
         element('green_tick').classList.add('green_tick_hidden')
     }, 2000)
 };
+
+const toggle_burn_after_reading = () =>
+{
+    if(burn_after_reading_required)
+    {
+        element('burn_after_reading').classList.remove('selected')
+        burn_after_reading_required = false
+    }
+    else
+    {
+        element('burn_after_reading').classList.add('selected')
+        burn_after_reading_required = true
+    }
+};
+
+const toggle_out_of_band = () =>
+{
+    if(out_of_band_required)
+    {
+        if(element('out_of_band_password_container').classList.contains('hidden'))
+        {
+            element('out_of_band').classList.remove('selected')
+            out_of_band_required = false
+        }
+    }
+    else
+    {
+        element('out_of_band').classList.add('selected')
+        out_of_band_required = true
+    }
+};
+

@@ -25,10 +25,10 @@ body
     border-radius: 3px;
     border: 0.5px solid #ff9393;
     float: left;
-    height: 38.5px;
+    height: 33px;
     margin-left: 10px;
     position: relative;
-    width: 40px;
+    width: 35px;
 }
 #clipboard_container:hover
 {
@@ -49,12 +49,12 @@ body
     border-radius: 3px;
     border: 0.5px solid #ff9393;
     float: left;
-    height: 38.5px;
-    left: -42px;
+    height: 33px;
+    left: -37px;
     position: relative;
     transform-origin: top right;
     transition: all 0.5s ease;
-    width: 41px;
+    width: 36px;
 }
 .green_tick_hidden
 {
@@ -97,6 +97,10 @@ input[type=checkbox]
     font-size: 0.8vw;
     width: 80%;
 }
+#new_clip:hover
+{
+    cursor: pointer;
+}
 #not_found_container
 {
     background: #ff6d6d;
@@ -112,13 +116,14 @@ input[type=checkbox]
 #out_of_band_password_container
 {
     height: 40px;
+    padding-bottom: 10px;
 }
 #out_of_band_password_first_input
 {
     float: left;
     padding: 10px;
     position: absolute;
-    width: 93%
+    width: calc(89% - 20px);
 }
 #out_of_band_password_second_input
 {
@@ -137,6 +142,19 @@ input[type=checkbox]
     padding: 10px;
     width: 100%;
 }
+.selectable
+{
+    cursor: pointer;
+}
+.selectable.selected
+{
+    cursor: default;
+}
+.selectable:hover:not(.selected)
+{
+    background: #ff3a3a;
+    color: white;
+}
 .selector
 {
     background: #d1d1d1;
@@ -151,11 +169,36 @@ input[type=checkbox]
     border: none;
     font-size: 0.9vw;
 }
-.send:hover
+/*
+selected must appear in the style sheet AFTER selector
+*/
+.selected
 {
-    background: #ff3a3a;
-    color: white;
+    background-color: #2dd52d;
+    background-image: url(/static/tick.svg);
+    background-position-x: 50%;
+    background-position-y: 25%;
+    background-repeat: no-repeat;
+    background-size: 30px;
+}
+#send_out_of_band
+{
+    background: white;
+    border: 0.5px solid #a9a9a9;
     cursor: pointer;
+    height: 38.5px;
+    left: 90%;
+    position: absolute;
+    width: 6%;
+}
+#send_out_of_band_arrow
+{
+    height: 200%;
+    left: -50%;
+    opacity: 0.7;
+    position: relative;
+    top: -50%;
+    width: 200%;
 }
 #show_password
 {
@@ -169,6 +212,7 @@ input[type=checkbox]
 #show_password_container
 {
     background: white;
+    cursor: not-allowed;
     border: 0.5px solid #a9a9a9;
     height: 38.5px;
     left: 96.5%;
@@ -188,14 +232,16 @@ textarea
     border-radius: 3px;
     color: #0a0a00;
     float: left;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 9px;
     position: relative;
-    height: 100%;
+    height: 24px;
 }
 #url_container
 {
     border-radius: 3px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-top: 30px;
     min-height: 40px;
     position: relative;
@@ -208,4 +254,69 @@ textarea
     position: relative;
     top: 25%;
     width: 50%;
+}
+
+/* Responsiveness */
+@media only screen and (max-width: 900px) and (min-width: 550px)
+{
+    .selector
+    {
+        font-size: 1.7vw;
+        margin-right: 5px;
+    }
+    .selector > select
+    {
+        font-size: 1.7vw;
+    }
+    #url
+    {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 65vw;
+    }
+}
+@media only screen and (max-width: 550px) and (min-width: 300px)
+{
+    #out_of_band_password_first_input
+    {
+        width: calc(97% - 20px);
+    }
+    .selector
+    {
+        margin-right: 3px;
+        font-size: 1.7vw;
+    }
+    .selector > select
+    {
+        font-size: 1.7vw;
+    }
+    #send_out_of_band
+    {
+        left: 99%;
+    }
+    #show_password_container
+    {
+        visibility: hidden;
+    }
+    #url
+    {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50vw;
+    }
+}
+@media only screen and (max-width: 300px)
+{
+    body
+    {
+        visibility: hidden;
+    }
+    body:before
+    {
+        content: "YOUR SCREEN IS WAYYYYYY TOO SMALL...";
+        font-size: 2.3rem;
+        visibility: visible;
+    }
 }

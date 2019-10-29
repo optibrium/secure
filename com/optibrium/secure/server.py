@@ -3,6 +3,7 @@ from com.optibrium.secure.backend import ObjectBackend
 from com.optibrium.secure.backend import RedisBackend
 from flask import Flask, request, render_template
 from flask_limiter import Limiter
+from flask_limiter.errors import RateLimitExceeded
 from flask_limiter.util import get_remote_address
 import logging
 from os import environ
@@ -44,5 +45,8 @@ def handle_error(error):
 
     if 'DEBUG' in environ:
         traceback.print_exc()
+
+    if isinstance(error, RateLimitExceeded):
+        return 'RATE LIMITED', 429
 
     return render_template('notfound.tpl'), 404
