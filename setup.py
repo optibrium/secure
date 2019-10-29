@@ -28,6 +28,7 @@ setup(
         'Topic :: Business Development :: Secrets Sharing'
     ],
     description='An secure clipboard for sharing secrets',
+    include_package_data=True,
     install_requires=[
         'Flask==1.1.1',
         'flask_limiter==1.1.0',
