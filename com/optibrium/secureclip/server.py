@@ -1,6 +1,6 @@
-from com.optibrium.secure.message import Message
-from com.optibrium.secure.backend import ObjectBackend
-from com.optibrium.secure.backend import RedisBackend
+from com.optibrium.secureclip.message import Message
+from com.optibrium.secureclip.backend import ObjectBackend
+from com.optibrium.secureclip.backend import RedisBackend
 from flask import Flask, request, render_template
 from flask_limiter import Limiter
 from flask_limiter.errors import RateLimitExceeded

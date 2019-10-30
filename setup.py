@@ -39,8 +39,14 @@ setup(
     ''',
     long_description_content_type='text/markdown',
     packages=[
-        'com.optibrium.secure'
+        'com.optibrium.secureclip'
     ],
+    package_data={
+        'com.optibrium.secure': ['templates/*', 'static/*']
+    },
+    package_dir={
+        'com.optibrium.secureclip': 'com/optibrium/secureclip/'
+    },
     python_requires='>=3.4, <4',
     project_urls={
         'Our Company': 'https://optibrium.com',

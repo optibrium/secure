@@ -1,4 +1,4 @@
-from com.optibrium.secure.message import Message
+from com.optibrium.secureclip.message import Message
 from redis import Redis
 import uuid
 

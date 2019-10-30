@@ -1,4 +1,4 @@
-from com.optibrium.secure.server import application
+from com.optibrium.secureclip.server import application
 
 
 if __name__ == '__main__':
