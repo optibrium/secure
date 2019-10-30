@@ -41,7 +41,7 @@ setup(
         'com.optibrium.secureclip'
     ],
     package_data={
-        '': ['templates/*', 'static/*']
+        '': ['templates/*', 'static/*', 'static/vendor/*']
     },
     python_requires='>=3.4, <4',
     project_urls={
