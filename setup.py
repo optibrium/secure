@@ -28,7 +28,6 @@ setup(
         'Topic :: Business Development :: Secrets Sharing'
     ],
     description='An secure clipboard for sharing secrets',
-    include_package_data=True,
     install_requires=[
         'Flask==1.1.1',
         'flask_limiter==1.1.0',
@@ -42,10 +41,7 @@ setup(
         'com.optibrium.secureclip'
     ],
     package_data={
-        'com.optibrium.secure': ['templates/*', 'static/*']
-    },
-    package_dir={
-        'com.optibrium.secureclip': 'com/optibrium/secureclip/'
+        '': ['templates/*', 'static/*']
     },
     python_requires='>=3.4, <4',
     project_urls={
