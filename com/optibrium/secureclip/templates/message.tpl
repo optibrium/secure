@@ -8,16 +8,20 @@
             var message = "{{ message.text }}";
             var init = () =>
             {
+                var window_password = location.hash.replace('#', '')
 
                 {% if message.double_encrypted %}
 
-                var password = element('out_of_band_password_second_input').value
-                message = decrypt(message, password)
+                var out_of_band_password = element('out_of_band_password_second_input').value
+                var inner_message = decrypt(message, out_of_band_password)
+                var decrypted = decrypt(inner_message, window_password)
+
+                {% else %}
+
+                var decrypted = decrypt(message, window_password)
 
                 {% endif %}
 
-                var password = location.hash.replace('#', '')
-                var decrypted = decrypt(message, password)
                 if (decrypted.length)
                 {
                     element('message').textContent = decrypted
