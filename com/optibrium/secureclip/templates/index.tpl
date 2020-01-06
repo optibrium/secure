@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>SecureClip | For when you need to reach out and paste something | In-browser encrypted messages</title>
         <script src='/static/vendor/aes-min.js'></script>
         <script src='/static/vendor/sha3-min.js'></script>
         <script src='/static/secure.js'></script>
@@ -13,6 +14,9 @@
         </div>
         <div class="centered">
             <textarea id='input' onfocus="hide_url_and_send()" onkeyup="hide_url_and_send()"></textarea>
+            <div id="text_cover" class='text_cover hidden'>
+                <p class="text_cover_parargraph">Hidden For Security</p>
+            </div>
         </div>
         <div id="out_of_band_password_container" class="centered hidden">
             <input

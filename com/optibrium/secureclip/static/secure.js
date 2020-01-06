@@ -15,6 +15,7 @@ const send = () =>
         return
 
     element('url_container').classList.add('hidden')
+    element('text_cover').classList.remove('hidden')
 
     if(out_of_band_required)
     {
@@ -124,6 +125,7 @@ const hide_url_and_send = () =>
 {
     element('url_container').classList.add('hidden')
     element('out_of_band_password_container').classList.add('hidden')
+    element('text_cover').classList.add('hidden')
     if(element('input').value.length)
     {
         element('send').classList.remove('hidden')

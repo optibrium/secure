@@ -2,8 +2,11 @@ import git
 from setuptools import setup
 
 def get_version_from_git_tag():
-    tag = git.Git().tag().split('\nv')[-1]
-    return tag if len(tag) else '0.0.0'
+    tags = git.Git().tag().replace('v', '').split('\n')
+    if not len(tags) or tags == ['']:
+        return '0.0.0'
+    tags.sort(key=lambda s: list(map(int, s.split('.'))))
+    return tags[-1]
 
 setup(
     name='secureclip',
