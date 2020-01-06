@@ -29,12 +29,26 @@ node('docker') {
         }
     }
 
-    stage('build Docker image, tag and push') {
-        if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
+    if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
+
+        stage('build Docker image') {
             app = docker.build("optibrium/secureclip")
+        }
+
+        stage('tag Docker image') {
             TAG = env.TAG_NAME.replace('v', '')
             app.tag("${TAG}")
+        }
+
+        stage('push Docker image') {
+            app.push()
             app.push("${TAG}")
+        }
+
+        node('master') {
+            stage('Update clip deployment in infra') {
+                sh "kubectl set image deployment/clip clip=optibrium/secureclip:${TAG}"
+            }
         }
     }
 }
