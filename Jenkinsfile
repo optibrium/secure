@@ -4,12 +4,6 @@ node('docker') {
 
     docker.image('optibrium/buildcontainer:0.10.0').inside {
 
-        stage('Install build dependencies') {
-            script {
-                sh 'pip3 install --no-cache-dir --user -r requirements.txt'
-            }
-        }
-
         stage('Build wheel') {
             script {
                 sh 'python3 setup.py bdist_wheel'
