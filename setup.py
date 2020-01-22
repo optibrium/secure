@@ -1,5 +1,5 @@
-import git
 from setuptools import setup
+from com.optibrium.buildcontainer import get_version_from_git_tag
 
 def get_version_from_git_tag():
     tags = git.Git().tag().replace('v', '').split('\n')
