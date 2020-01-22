@@ -1,13 +1,6 @@
 from setuptools import setup
 from com.optibrium.buildcontainer import get_version_from_git_tag
 
-def get_version_from_git_tag():
-    tags = git.Git().tag().replace('v', '').split('\n')
-    if not len(tags) or tags == ['']:
-        return '0.0.0'
-    tags.sort(key=lambda s: list(map(int, s.split('.'))))
-    return tags[-1]
-
 setup(
     name='secureclip',
     version=get_version_from_git_tag(),
