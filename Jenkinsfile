@@ -2,7 +2,7 @@ node('docker') {
 
     checkout scm
 
-    docker.image('optibrium/buildcontainer:0.9.0').inside {
+    docker.image('optibrium/buildcontainer:0.10.0').inside {
 
         stage('Install build dependencies') {
             script {
