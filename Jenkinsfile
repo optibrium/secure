@@ -26,7 +26,7 @@ node('docker') {
     if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
 
         stage('build Docker image') {
-            app = docker.build("--no-cache", "optibrium/secureclip")
+            app = docker.build("optibrium/secureclip")
         }
 
         stage('tag Docker image') {
