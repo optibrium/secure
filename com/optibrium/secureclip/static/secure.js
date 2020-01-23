@@ -27,6 +27,7 @@ const send = () =>
             save_to_server(text, (reply)=>
             {
                 show_url(url_template(reply.id, password))
+                copy_to_clipboard(500)
             })
         })
     }
@@ -37,6 +38,7 @@ const send = () =>
         save_to_server(text, (reply)=>
         {
             show_url(url_template(reply.id, password))
+            copy_to_clipboard(500)
         })
     }
 };
@@ -142,7 +144,7 @@ const show_url = (url)=>
     element('url_container').classList.remove('hidden')
 };
 
-const copy_to_clipboard = () =>
+const copy_to_clipboard = (duration=2000) =>
 {
     var temp = document.createElement('textarea')
     temp.value = element('url').innerText
@@ -154,7 +156,7 @@ const copy_to_clipboard = () =>
     setTimeout(() =>
     {
         element('green_tick').classList.add('green_tick_hidden')
-    }, 2000)
+    }, duration)
 };
 
 const toggle_burn_after_reading = () =>

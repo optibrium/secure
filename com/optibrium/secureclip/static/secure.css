@@ -305,6 +305,10 @@ textarea
         text-overflow: ellipsis;
         width: 65vw;
     }
+    #url_container
+    {
+        width: 100%;
+    }
 }
 @media only screen and (max-width: 650px) and (min-width: 450px)
 {

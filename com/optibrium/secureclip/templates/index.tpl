@@ -7,7 +7,7 @@
         <script src='/static/secure.js'></script>
         <link rel="stylesheet" type="text/css" href="/static/secure.css">
     </head>
-    <body>
+    <body onload="element('input').focus()">
         <div class="header centered">
             <h1>SecureClip</h1>
             <h3>For when you need to reach out and paste something</h3>
@@ -75,7 +75,7 @@
             <span
                 id="clipboard_container"
                 title="Copy to Clipboard"
-                onmousedown="copy_to_clipboard()"
+                onmousedown="copy_to_clipboard(2000)"
             >
                 <img src='/static/clipboard.svg' id="clipboard"/>
             </span>
