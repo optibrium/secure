@@ -46,3 +46,17 @@ node('docker') {
         }
     }
 }
+
+node('master') {
+
+    always {
+
+        success {
+            sh 'report-to-github success'
+        }
+
+        failure {
+            sh 'report-to-github failure'
+        }
+    }
+}
