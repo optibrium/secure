@@ -51,7 +51,11 @@ node('docker') {
 
         docker.image('optibrium/buildcontainer:0.16.0').inside {
             stage('Report Success to Github') {
-                sh 'report-to-github success optibrium/secureclip $(git rev-parse HEAD)'
+                withCredentials(
+                    [string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]
+                ) {
+                    sh 'report-to-github success optibrium/secureclip $(git rev-parse HEAD)'
+                }
             }
         }
 
@@ -59,7 +63,11 @@ node('docker') {
 
         docker.image('optibrium/buildcontainer:0.16.0').inside {
             stage('Report Failure to Github') {
-                sh 'report-to-github failure optibrium/secureclip $(git rev-parse HEAD)'
+                withCredentials(
+                    [string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]
+                ) {
+                    sh 'report-to-github failure optibrium/secureclip $(git rev-parse HEAD)'
+                }
             }
         }
     }
