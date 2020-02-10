@@ -10,8 +10,9 @@ node('docker') {
             }
         }
 
-        stage('Upload to PyPi') {
-            if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
+        if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
+
+            stage('Upload to PyPi') {
 
                 withCredentials(
                     [string(credentialsId: 'pypi-password', variable: 'PASSWORD')]
@@ -49,7 +50,7 @@ node('docker') {
 
 node('master') {
 
-    always {
+    post {
 
         success {
             sh 'report-to-github success'
@@ -57,6 +58,10 @@ node('master') {
 
         failure {
             sh 'report-to-github failure'
+        }
+
+        aborted {
+            sh 'report-to-github aborted'
         }
     }
 }
