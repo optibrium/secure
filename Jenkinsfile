@@ -4,7 +4,7 @@ node('docker') {
 
         checkout scm
 
-        docker.image('optibrium/buildcontainer:0.16.0').inside {
+        docker.image('optibrium/buildcontainer:0.17.0').inside {
 
             stage('Build wheel') {
                 script {
@@ -49,7 +49,7 @@ node('docker') {
             }
         }
 
-        docker.image('optibrium/buildcontainer:0.16.0').inside {
+        docker.image('optibrium/buildcontainer:0.17.0').inside {
             stage('Report Success to Github') {
                 withCredentials(
                     [string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]
@@ -61,7 +61,7 @@ node('docker') {
 
     } catch (Exception e) {
 
-        docker.image('optibrium/buildcontainer:0.16.0').inside {
+        docker.image('optibrium/buildcontainer:0.17.0').inside {
             stage('Report Failure to Github') {
                 withCredentials(
                     [string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]
