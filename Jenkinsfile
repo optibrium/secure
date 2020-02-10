@@ -4,7 +4,7 @@ node('docker') {
 
         checkout scm
 
-        docker.image('optibrium/buildcontainer:0.15.0').inside {
+        docker.image('optibrium/buildcontainer:0.16.0').inside {
 
             stage('Build wheel') {
                 script {
@@ -49,7 +49,7 @@ node('docker') {
             }
         }
 
-        docker.image('optibrium/buildcontainer:0.15.0').inside {
+        docker.image('optibrium/buildcontainer:0.16.0').inside {
             stage('Report Success to Github') {
                 sh 'report-to-github success optibrium/secureclip $(git rev-parse HEAD)'
             }
@@ -57,7 +57,7 @@ node('docker') {
 
     } catch (Exception e) {
 
-        docker.image('optibrium/buildcontainer:0.15.0').inside {
+        docker.image('optibrium/buildcontainer:0.16.0').inside {
             stage('Report Failure to Github') {
                 sh 'report-to-github failure optibrium/secureclip $(git rev-parse HEAD)'
             }
