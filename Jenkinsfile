@@ -60,7 +60,7 @@ node('docker') {
             }
         }
 
-    } catch (Exception e) {
+    } catch (Exception failure) {
 
         docker.image('optibrium/buildcontainer:0.18.0').inside {
 
@@ -72,5 +72,7 @@ node('docker') {
                 }
             }
         }
+
+        throw failure
     }
 }
