@@ -51,7 +51,7 @@ node('docker') {
 
         node('master') {
             stage('Report Success to Github') {
-                sh 'report-to-github success'
+                sh "report-to-github success optibrium/secureclip ${env.GIT_COMMIT}"
             }
         }
 
@@ -59,7 +59,7 @@ node('docker') {
 
         node('master') {
             stage('Report Failure to Github') {
-                sh 'report-to-github failure'
+                sh "report-to-github failure optibrium/secureclip ${env.GIT_COMMIT}"
             }
         }
     }
