@@ -59,12 +59,10 @@ node('docker') {
                 }
             }
 
-/*            if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}\-.*/) {*/
 
                 stage('Add link to Jenkins') {
                     manager.createSummary("Wheel File").appendText("<a href='https://pypi.infra.optibrium.com/packages/secureclip-${env.TAG_NAME.replace('^v', '')}-py3-none-any.whl'>Wheel File</a>", false)
                 }
-/*            }*/
         }
 
     } catch (Exception failure) {
