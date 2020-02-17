@@ -61,7 +61,7 @@ node('docker') {
 
 
                 stage('Add link to Jenkins') {
-                    currentBuild.description = "<a href='https://pypi.infra.optibrium.com/packages/secureclip-${env.TAG_NAME.replace('^v', '')}-py3-none-any.whl'>Wheel File</a>"
+                    currentBuild.description = "<a href='https://pypi.infra.optibrium.com/packages/secureclip-test-py3-none-any.whl'>Wheel File</a>"
                 }
         }
 
