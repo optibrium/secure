@@ -4,7 +4,7 @@ node('docker') {
 
         checkout scm
 
-        docker.image('optibrium/buildcontainer:0.18.0').inside {
+        docker.image('optibrium/buildcontainer:0.19.0').inside {
 
             stage('Build wheel') {
                 script {
@@ -12,7 +12,7 @@ node('docker') {
                 }
             }
 
-            if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
+            if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}\-.*/) {
 
                 stage('Upload to PyPi') {
 
@@ -26,14 +26,14 @@ node('docker') {
             }
         }
 
-        if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}/) {
+        if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}\-.*/) {
 
             stage('build Docker image') {
                 app = docker.build("optibrium/secureclip")
             }
 
             stage('tag Docker image') {
-                TAG = env.TAG_NAME.replace('v', '')
+                TAG = env.TAG_NAME.replace('^v', '')
                 app.tag("${TAG}")
             }
 
@@ -49,7 +49,7 @@ node('docker') {
             }
         }
 
-        docker.image('optibrium/buildcontainer:0.18.0').inside {
+        docker.image('optibrium/buildcontainer:0.19.0').inside {
 
             stage('Report Success to Github') {
                 withCredentials(
@@ -58,11 +58,18 @@ node('docker') {
                     sh 'report-to-github success'
                 }
             }
+
+            if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}\-.*/) {
+
+                stage('Add link to Jenkins') {
+                    manager.createSummary("Wheel File").appendText("<a href='https://pypi.infra.optibrium.com/packages/secureclip-${env.TAG_NAME.replace('^v', '')}-py3-none-any.whl'>Wheel File</a>", false)
+                }
+            }
         }
 
     } catch (Exception failure) {
 
-        docker.image('optibrium/buildcontainer:0.18.0').inside {
+        docker.image('optibrium/buildcontainer:0.19.0').inside {
 
             stage('Report Failure to Github') {
                 withCredentials(
