@@ -34,7 +34,7 @@ node('docker') {
 
                 stage('Upload to PyPi') {
 
-                    sh 'twine upload --repository-url https://pypi.infra.optibrium.com -u twine -p ${PASSWORD} dist/*.whl'
+                    sh 'twine upload --repository-url https://pypi.infra.optibrium.com -u twine -p ${PYPI_PASSWORD} dist/*.whl'
                 }
             }
         }
