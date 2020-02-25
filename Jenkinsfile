@@ -66,13 +66,6 @@ node('docker') {
             stage('Report Success to Github') {
                 sh 'report-to-github success'
             }
-
-            if (env.GIT_TAG) {
-
-                stage('Add link to Jenkins') {
-                    manager.createSummary("Wheel File").appendText("<a href='https://pypi.infra.optibrium.com/packages/secureclip-${env.GIT_TAG}-py3-none-any.whl'>Wheel File</a>", false)
-                }
-            }
         }
 
     } catch (Exception failure) {
