@@ -21,7 +21,7 @@ node('docker') {
             }
         }
     
-        if (GIT_TAG) {
+        if (env.GIT_TAG) {
     
             stage('Upload to PyPi') {
     
@@ -33,24 +33,24 @@ node('docker') {
         }
     }
     
-    if (GIT_TAG) {
+    if (env.GIT_TAG) {
     
         stage('build Docker image') {
             app = docker.build(PROJECT)
         }
     
         stage('tag Docker image') {
-            app.tag(GIT_TAG)
+            app.tag(env.GIT_TAG)
         }
     
         stage('push Docker image') {
             app.push()
-            app.push(GIT_TAG)
+            app.push(env.GIT_TAG)
         }
     
         node('master') {
             stage('Update clip deployment in infra') {
-                sh "kubectl set image deployment/clip clip=PROJECT:${GIT_TAG}"
+                sh "kubectl set image deployment/clip clip=PROJECT:${env.GIT_TAG}"
             }
         }
     }
