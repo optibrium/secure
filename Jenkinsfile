@@ -1,26 +1,19 @@
 node('docker') {
 
+    def PROJECT = 'optibrium/secureclip'
+    def BUILDCONTAINER = 'optibrium/buildcontainer:0.21.1'
+
     checkout scm
 
     stage('Collect environment variables') {
 
-        def PROJECT = 'optibrium/secureclip'
-        def BUILDCONTAINER = 'optibrium/buildcontainer:0.21.1'
-
         if (env.TAG_NAME ==~ /v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}(\-.*)?/) {
 
-            def GIT_TAG = env.TAG_NAME.replaceFirst('v', '')
-
-            withCredentials([
-                string(credentialsId: 'pypi-password', variable: 'PYPI_PASSWORD'),
-            ]) {
-                def PYPI_PASSWORD = "${PYPI_PASSWORD}"
-            }
+            env.GIT_TAG = env.TAG_NAME.replaceFirst('v', '')
         }
-
     }
 
-    docker.image(env.BUILDCONTAINER).inside {
+    docker.image(BUILDCONTAINER).inside {
     
         stage('Build wheel') {
             script {
@@ -32,7 +25,10 @@ node('docker') {
     
             stage('Upload to PyPi') {
     
-                sh 'twine upload --repository-url https://pypi.infra.optibrium.com -u twine -p ${PYPI_PASSWORD} dist/*.whl'
+                withCredentials([string(credentialsId: 'pypi-password', variable: 'PYPI_PASSWORD')]) {
+
+                    sh 'twine upload --repository-url https://pypi.infra.optibrium.com -u twine -p ${PYPI_PASSWORD} dist/*.whl'
+                }
             }
         }
     }
@@ -40,7 +36,7 @@ node('docker') {
     if (GIT_TAG) {
     
         stage('build Docker image') {
-            app = docker.build("optibrium/secureclip")
+            app = docker.build(PROJECT)
         }
     
         stage('tag Docker image') {
@@ -54,7 +50,7 @@ node('docker') {
     
         node('master') {
             stage('Update clip deployment in infra') {
-                sh "kubectl set image deployment/clip clip=optibrium/secureclip:${GIT_TAG}"
+                sh "kubectl set image deployment/clip clip=PROJECT:${GIT_TAG}"
             }
         }
     }
