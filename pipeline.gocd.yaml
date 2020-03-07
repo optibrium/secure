@@ -11,6 +11,8 @@ pipelines:
             build_wheel:
               tasks:
                - exec:
-                   command: pip3 install -r requirements.txt -i https://pypi.infra.optibrium.com
+                   command: bash
+                   arguments: -c pip3 install -r requirements.txt -i https://pypi.infra.optibrium.com
                - exec:
-                   command: python3 setup.py bdist_wheel
+                   command: bash
+                   arguments: -c python3 setup.py bdist_wheel
