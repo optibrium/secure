@@ -1,0 +1,16 @@
+---
+pipelines:
+  secureclip:
+    group: simple
+    materials:
+      git:
+        git: git@github.com:optibrium/secureclip.git
+    stages:
+      - build:
+          jobs:
+            build_wheel:
+              tasks:
+               - exec:
+                   command: pip3 install -r requirements.txt -i https://pypi.infra.optibrium.com
+               - exec:
+                   command: python3 setup.py bdist_wheel
