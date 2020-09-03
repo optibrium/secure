@@ -8,7 +8,7 @@ node('docker') {
             string(credentialsId: 'pypi-password', variable: 'PYPI_PASSWORD'),
             string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')
         ]) {
-            env.PYPI_PASSWORD = "${PYPI_PASSWORD}"
+            env.TWINE_PASSWORD = "${PYPI_PASSWORD}"
             env.GITHUB_TOKEN = "${GITHUB_TOKEN}"
 
             env.PROJECT = 'optibrium/secureclip'
@@ -34,7 +34,7 @@ node('docker') {
 
                 stage('Upload to PyPi') {
 
-                    sh 'twine upload --repository-url https://pypi.infra.optibrium.com -u twine -p ${PYPI_PASSWORD} dist/*.whl'
+                    sh 'twine upload --repository-url https://pypi.infra.optibrium.com -u twine dist/*.whl'
                 }
             }
         }
