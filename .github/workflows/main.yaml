@@ -4,8 +4,8 @@ name: secureclip CI/CD
 
 on:
   push:
-    branches:
-      - master
+   tags:
+    - v*
 
 
 jobs:
@@ -65,13 +65,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: build docker image
-        run: "docker build -t optibrium/secureclip:$BUILD_TAG --build-arg PIP_EXTRA_INDEX_URL=$PIP_EXTRA_INDEX_URL ."
+        run: "docker build -t ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:$BUILD_TAG -t ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:latest -t optibrium/secureclip:$BUILD_TAG  -t optibrium/secureclip:latest --build-arg PIP_EXTRA_INDEX_URL=$PIP_EXTRA_INDEX_URL ."
 
       - name: Login to AWS ECR
         run: "aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com"
 
-      - name: tag docker image
-        run: "docker tag optibrium/secureclip:$BUILD_TAG ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:$BUILD_TAG"
-
       - name: push docker image to AWS ECR
-        run: "docker push ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:$BUILD_TAG"
+        run: |
+            docker push ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:$BUILD_TAG
+            docker push ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:latest
+            docker push optibrium/secureclip:$BUILD_TAG
+            docker push optibrium/secureclip:latest
