@@ -1,0 +1,78 @@
+---
+
+name: secureclip CI/CD
+
+on:
+  push:
+   tags:
+    - v*
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+
+      - name: checkout
+        uses: "actions/checkout@v2"
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Collect build tag
+        run: |
+            echo BUILD_TAG=$(echo ${{ github.ref }} $(date +%Y%m%d.%s.000000) | awk '{printf match($1, /^refs\/tags\/v[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}$/) ? substr($1, 12) : $2}') >> $GITHUB_ENV
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.OPTIBRIUMBOT_AWS_ACCESS_KEY_ID  }}
+          aws-secret-access-key: ${{ secrets.OPTIBRIUMBOT_AWS_SECRET_ACCESS_KEY  }}
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}:role/AWSControlTowerExecution
+          role-skip-session-tagging: true
+          role-duration-seconds: 900
+
+      - name: Set AWS CodeArtifact credentials
+        run: |
+         token=$(aws codeartifact get-authorization-token --domain pypi --domain-owner $OPTIBRIUM_INFRA_ACCOUNT_ID --query authorizationToken --output text)
+         echo "PIP_EXTRA_INDEX_URL=https://aws:$token@pypi-$OPTIBRIUM_INFRA_ACCOUNT_ID.d.codeartifact.eu-west-2.amazonaws.com/pypi/pypi-infra/simple" >> $GITHUB_ENV
+        env:
+         OPTIBRIUM_INFRA_ACCOUNT_ID: "${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}"
+
+      - name: install wheel
+        run: 'pip3 install wheel'
+
+      - name: build wheel
+        run: 'python3 setup.py bdist_wheel'
+      
+      - name: upload to PyPi
+        run: |
+            aws codeartifact login --tool twine --repository pypi-infra --domain pypi --domain-owner $OPTIBRIUM_INFRA_ACCOUNT_ID &&
+            twine upload --skip-existing --repository codeartifact dist/*.whl
+        env:
+          OPTIBRIUM_INFRA_ACCOUNT_ID: "${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}"
+     
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: optibriumbot
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: build docker image
+        run: "docker build -t ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:$BUILD_TAG -t ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:latest -t optibrium/secureclip:$BUILD_TAG  -t optibrium/secureclip:latest --build-arg PIP_EXTRA_INDEX_URL=$PIP_EXTRA_INDEX_URL ."
+
+      - name: Login to AWS ECR
+        run: "aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com"
+
+      - name: push docker image to AWS ECR
+        run: |
+            docker push ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:$BUILD_TAG
+            docker push ${{ secrets.OPTIBRIUM_INFRA_ACCOUNT_ID }}.dkr.ecr.eu-west-1.amazonaws.com/secureclip:latest
+            docker push optibrium/secureclip:$BUILD_TAG
+            docker push optibrium/secureclip:latest
