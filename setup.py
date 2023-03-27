@@ -27,7 +27,7 @@ setup(
     install_requires=[
         'Flask==1.1.1',
         'flask_limiter==1.1.0',
-        'redis==3.3.11'
+        'redis==4.5.3'
     ],
     keywords='secure clip clipboard',
     long_description='''
